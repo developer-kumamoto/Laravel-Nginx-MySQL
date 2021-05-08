@@ -1,12 +1,12 @@
 version: "3.9"
 services: 
-    acl_composer:
+    laravel_composer:
         image: composer
         volumes:
           - ./backend:/work/backend
         working_dir: /work/backend
 
-    acl_app:
+    laravel_app:
         build: ./infra/app
         ports:
             - 9000:9000
@@ -14,7 +14,7 @@ services:
             - ./backend:/var/www/html
         working_dir: /var/www/html
 
-    acl_web:
+    laravel_web:
         image: nginx:stable-alpine
         ports:
             -  8888:80
@@ -22,25 +22,25 @@ services:
             -  ./backend:/var/www/html
             -  ./infra/web/default.conf:/etc/nginx/conf.d/default.conf
         depends_on:
-            -  acl_app
-            -  acl_db
+            -  laravel_app
+            -  laravel_db
 
-    acl_db:
+    laravel_db:
         image: mysql
         environment:
             MYSQL_ROOT_PASSWORD: password
-            MYSQL_DATABASE: acl
-            MYSQL_USER: acl_user
-            MYSQL_PASSWORD: acl_password
+            MYSQL_DATABASE: laravel
+            MYSQL_USER: laravel_user
+            MYSQL_PASSWORD: laravel_password
         ports: 
             - 3306:3306
         volumes: 
-            - acl-db-data:/var/lib/mysql
+            - laravel-db-data:/var/lib/mysql
     
-    acl_adminer:
+    laravel_adminer:
         image: adminer
         restart: always
         ports:
             - 8080:8080
 volumes: 
-    acl-db-data:
+    laravel-db-data:
